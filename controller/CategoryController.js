@@ -52,7 +52,6 @@ export default class CategoryController {
             } else {
               done(null, null);
             }
-            //FIXME 一个 item 只能有一个 category
           }
         });
       }
