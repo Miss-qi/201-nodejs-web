@@ -15,9 +15,9 @@ class ItemController{
               return next(error);
             }
             if (!data) {
-              res.status(constant.NOT_FOUND).send({item: doc, totalCount: data});
+              return res.status(constant.NOT_FOUND).send({item: doc, totalCount: data});
             }
-            res.status(constant.OK).send({item: doc, totalCount: data});
+            return res.status(constant.OK).send({item: doc, totalCount: data});
           });
         });
   }
@@ -25,13 +25,13 @@ class ItemController{
   getOne(req, res, next) {
     const itemId = req.params.itemId;
     Item.findById({'_id': itemId}, (err, doc) => {
-      if (!doc) {
-        res.sendStatus(constant.NOT_FOUND);
-      }
       if (err) {
         return next(err);
       }
-      res.status(constant.OK).send(doc);
+      if (!doc) {
+        return res.sendStatus(constant.NOT_FOUND);
+      }
+      return res.status(constant.OK).send(doc);
     });
   }
 
@@ -42,9 +42,9 @@ class ItemController{
         return next(err);
       }
       if (!doc) {
-        res.sendStatus(constant.NOT_FOUND);
+        return res.sendStatus(constant.NOT_FOUND);
       }
-      res.sendStatus(constant.NO_CONTENT);
+      return res.sendStatus(constant.NO_CONTENT);
     });
   }
 
@@ -53,7 +53,7 @@ class ItemController{
       if (err) {
         return next(err);
       }
-      res.status(constant.CREATED).send({uri: 'items/' + doc._id});
+      return res.status(constant.CREATED).send({uri: 'items/' + doc._id});
     });
   }
 
@@ -66,7 +66,7 @@ class ItemController{
       if (!doc) {
         return res.sendStatus(constant.NOT_FOUND);
       }
-      res.sendStatus(constant.NO_CONTENT);
+      return res.sendStatus(constant.NO_CONTENT);
     });
   }
 }

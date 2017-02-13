@@ -14,9 +14,9 @@ class CategoryController{
           return next(error);
         }
         if (!data) {
-          res.status(constant.NOT_FOUND).send({item: doc, totalCount: data});
+          return res.status(constant.NOT_FOUND).send({item: doc, totalCount: data});
         }
-        res.status(constant.OK).send({item: doc, totalCount: data});
+        return res.status(constant.OK).send({item: doc, totalCount: data});
       });
     });
   }
@@ -29,9 +29,9 @@ class CategoryController{
         return next(err);
       }
       if (!doc) {
-        res.sendStatus(constant.NOT_FOUND);
+        return res.sendStatus(constant.NOT_FOUND);
       }
-      res.status(constant.OK).send(doc);
+      return res.status(constant.OK).send(doc);
     });
   }
 
@@ -43,16 +43,16 @@ class CategoryController{
         return next(err);
       }
       if (doc) {
-        res.sendStatus(constant.FORBIDDEN);
+        return res.sendStatus(constant.FORBIDDEN);
       }
       Category.findOneAndRemove({'_id': categoryId}, (err, doc) => {
-        if (!doc) {
-          res.sendStatus(constant.NOT_FOUND);
-        }
         if (err) {
           return next(err);
         }
-        res.sendStatus(constant.NO_CONTENT);
+        if (!doc) {
+          return res.sendStatus(constant.NOT_FOUND);
+        }
+        return res.sendStatus(constant.NO_CONTENT);
       });
     });
   }
@@ -62,7 +62,7 @@ class CategoryController{
       if (err) {
         return next(err);
       }
-      res.status(constant.CREATED).send({uri: 'categories/' + doc._id});
+      return res.status(constant.CREATED).send({uri: 'categories/' + doc._id});
     });
   }
 
@@ -75,7 +75,7 @@ class CategoryController{
       if (!doc) {
         return res.sendStatus(constant.NOT_FOUND);
       }
-      res.sendStatus(constant.NO_CONTENT);
+      return res.sendStatus(constant.NO_CONTENT);
     });
   }
 }

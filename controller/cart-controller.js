@@ -15,9 +15,9 @@ class CartController {
               return next(error);
             }
             if (!data) {
-              res.status(constant.NOT_FOUND).send({item: doc, totalCount: data});
+              return res.status(constant.NOT_FOUND).send({item: doc, totalCount: data});
             }
-            res.status(constant.OK).send({item: doc, totalCount: data});
+            return res.status(constant.OK).send({item: doc, totalCount: data});
           });
         });
   }
@@ -31,9 +31,9 @@ class CartController {
             return next(err);
           }
           if (!doc) {
-            res.sendStatus(constant.NOT_FOUND);
+            return res.sendStatus(constant.NOT_FOUND);
           }
-          res.status(constant.OK).send(doc);
+          return res.status(constant.OK).send(doc);
         });
   }
 
@@ -44,9 +44,9 @@ class CartController {
         return next(err);
       }
       if (!doc) {
-        res.sendStatus(constant.NOT_FOUND);
+        return res.sendStatus(constant.NOT_FOUND);
       }
-      res.sendStatus(constant.NO_CONTENT);
+      return res.sendStatus(constant.NO_CONTENT);
     });
   }
 
@@ -55,7 +55,7 @@ class CartController {
       if (err) {
         return next(err);
       }
-      res.status(constant.CREATED).send({uri: 'carts/' + doc._id});
+      return res.status(constant.CREATED).send({uri: 'carts/' + doc._id});
     });
   }
 
@@ -68,7 +68,7 @@ class CartController {
       if (!doc) {
         return res.sendStatus(constant.NOT_FOUND);
       }
-      res.sendStatus(constant.NO_CONTENT);
+      return res.sendStatus(constant.NO_CONTENT);
     });
   }
 }
