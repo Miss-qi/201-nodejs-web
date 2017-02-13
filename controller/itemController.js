@@ -1,55 +1,74 @@
-import Item from '../models/item';
+const Item = require('../models/item');
+const constant = require('../config/constant');
+const async = require('async');
 
-export default class ItemController {
+class ItemController{
   getAll(req, res, next) {
-    Item.find({}, (err, doc) => {
+    Item.find({})
+        .populate('categoryId')
+        .exec((err, doc) => {
+          if (err) {
+            return next(err);
+          }
+          Item.count((error, data) => {
+            if (error) {
+              return next(error);
+            }
+            if (!data) {
+              res.status(constant.NOT_FOUND).send({item: doc, totalCount: data});
+            }
+            res.status(constant.OK).send({item: doc, totalCount: data});
+          });
+        });
+  }
+
+  getOne(req, res, next) {
+    const itemId = req.params.itemId;
+    Item.findById({'_id': itemId}, (err, doc) => {
+      if (!doc) {
+        res.sendStatus(constant.NOT_FOUND);
+      }
       if (err) {
         return next(err);
       }
-      return res.send(doc);
+      res.status(constant.OK).send(doc);
     });
   }
 
-  getOneById(req, res, next) {
-    let id = req.params.id;
-
-    Item.findOne({id}, (err, doc) => {
+  delete(req, res, next) {
+    const itemId = req.params.itemId;
+    Item.findOneAndRemove({'_id': itemId}, (err, doc) => {
       if (err) {
         return next(err);
-      } else {
-        return res.send(doc);
       }
+      if (!doc) {
+        res.sendStatus(constant.NOT_FOUND);
+      }
+      res.sendStatus(constant.NO_CONTENT);
     });
   }
 
-  addItem(req, res, next) {
-    let id = req.body.id;
-    let name = req.body.name;
-
-    Item.create({id, name});
-    return res.send('create one item');
-  }
-
-  deleteItem(req, res, next) {
-    let id = req.params.id;
-
-    Item.remove({id}, (err) => {
+  create(req, res, next) {
+    new Item(req.body).save((err, doc) => {
       if (err) {
         return next(err);
       }
-      return res.send('delete one item');
+      res.status(constant.CREATED).send({uri: 'items/' + doc._id});
     });
   }
 
-  updateItem(req, res, next) {
-    let id = req.params.id;
-    let name = req.body.name;
-
-    Item.update({id}, {name}, (err) => {
+  update(req, res, next) {
+    const itemId = req.params.itemId;
+    Item.findOneAndUpdate({'_id': itemId}, req.body, (err, doc) => {
       if (err) {
         return next(err);
       }
-      return res.send('update this item');
+      if (!doc) {
+        return res.sendStatus(constant.NOT_FOUND);
+      }
+      res.sendStatus(constant.NO_CONTENT);
     });
   }
 }
+
+module.exports = ItemController;
