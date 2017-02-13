@@ -58,8 +58,7 @@ class CategoryController{
   }
 
   create(req, res, next) {
-    const data = req.body;
-    new Category(data).save((err, doc) => {
+    Category.create(req.body, (err, doc) => {
       if (err) {
         return next(err);
       }
