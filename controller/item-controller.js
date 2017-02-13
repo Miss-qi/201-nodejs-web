@@ -49,7 +49,7 @@ class ItemController{
   }
 
   create(req, res, next) {
-    new Item(req.body).save((err, doc) => {
+    Item.create(req.body, (err, doc) => {
       if (err) {
         return next(err);
       }
