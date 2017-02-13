@@ -1,14 +1,10 @@
-import mongoose from 'mongoose';
-let Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-let CategorySchema = new Schema({
-  categoryId: Number,
-  categoryName: String,
-  items: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Item'
-  }]
+const categorySchema = new Schema({
+  name: String
 });
 
-let Category = mongoose.model('Category', CategorySchema);
-export default Category;
+const Category = mongoose.model('Category', categorySchema);
+
+module.exports = Category;

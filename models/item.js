@@ -1,11 +1,15 @@
-import mongoose from 'mongoose';
-let Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-let ItemSchema = new Schema({
-  id: Number,
-  name: String
+const itemSchema = new Schema({
+  name: String,
+  price: Number,
+  categoryId: {
+    type: Schema.ObjectId,
+    ref: 'Category'
+  }
 });
 
-let Item = mongoose.model('Item', ItemSchema);
+const Item = mongoose.model('Item', itemSchema);
 
-export default Item;
+module.exports = Item;
