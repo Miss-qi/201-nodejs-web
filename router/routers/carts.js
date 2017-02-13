@@ -1,14 +1,13 @@
-import {Router} from 'express';
-import CartController from '../../controller/CartController';
+const {Router} = require('express');
+const CartController = require('../../controller/cartController');
 
 const router = Router();
-const cartCtrl = new CartController();
+const cartCml = new CartController();
 
-router.get('/', cartCtrl.getAllCarts);
-router.get('/:cartNumber', cartCtrl.getOneCartById);
-router.post('/', cartCtrl.addCart);
-router.post('/:cartNumber/item/:itemId', cartCtrl.addItemForCart);
-router.delete('/:cartNumber', cartCtrl.deleteCart);
-router.delete('/:cartNumber/item/:itemId', cartCtrl.deleteItemFromCart);
+router.get('/', cartCml.getAll);
+router.get('/:cartId', cartCml.getOne);
+router.delete('/:cartId', cartCml.delete);
+router.post('/', cartCml.create);
+router.put('/:cartId', cartCml.update);
 
-export default router;
+module.exports = router;
