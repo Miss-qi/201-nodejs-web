@@ -1,6 +1,6 @@
 import items from './routers/items';
-import category from './routers/category';
-import cart from './routers/cart';
+import category from './routers/categories';
+import cart from './routers/carts';
 
 export default function (app) {
   app.use('/items', items);
