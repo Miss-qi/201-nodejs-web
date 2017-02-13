@@ -51,7 +51,7 @@ class CartController {
   }
 
   create(req, res, next) {
-    new Cart(req.body).save((err, doc) => {
+    Cart.create(req.body, (err, doc) => {
       if (err) {
         return next(err);
       }
