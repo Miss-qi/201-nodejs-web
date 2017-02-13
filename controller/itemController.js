@@ -1,4 +1,4 @@
-const Item = require('../models/item');
+const Item = require('../model/item');
 const constant = require('../config/constant');
 const async = require('async');
 

@@ -1,5 +1,5 @@
-const Category = require('../models/category');
-const Item = require('../models/item');
+const Category = require('../model/category');
+const Item = require('../model/item');
 const constant = require('../config/constant');
 const async = require('async');
 

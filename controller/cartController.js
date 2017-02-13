@@ -1,4 +1,4 @@
-const Cart = require('../models/cart');
+const Cart = require('../model/cart');
 const constant = require('../config/constant');
 const async = require('async');
 

@@ -1,8 +1,8 @@
-import items from './routers/items';
-import category from './routers/categories';
-import cart from './routers/carts';
+const items = require('./router/items');
+const category = require('./router/categories');
+const cart = require('./router/carts');
 
-export default function (app) {
+module.exports = function (app) {
   app.use('/items', items);
   app.use('/category', category);
   app.use('/cart', cart);
