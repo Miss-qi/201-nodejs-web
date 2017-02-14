@@ -34,28 +34,7 @@ class CategoryController{
       return res.status(constant.OK).send(doc);
     });
   }
-
-  // delete(req, res, next) {
-  //   const categoryId = req.params.categoryId;
-  //
-  //   Item.find(categoryId, (err, doc) => {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     if (doc) {
-  //       return res.sendStatus(constant.FORBIDDEN);
-  //     }
-  //     Category.findOneAndRemove({'_id': categoryId}, (err, doc) => {
-  //       if (err) {
-  //         return next(err);
-  //       }
-  //       if (!doc) {
-  //         return res.sendStatus(constant.NOT_FOUND);
-  //       }
-  //       return res.sendStatus(constant.NO_CONTENT);
-  //     });
-  //   });
-  // }
+  
   delete(req, res, next) {
     const categoryId = req.params.categoryId;
 
