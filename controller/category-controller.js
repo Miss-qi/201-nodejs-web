@@ -4,20 +4,20 @@ const constant = require('../config/constant');
 const async = require('async');
 
 class CategoryController{
+  
   getAll(req, res, next) {
-    Category.find((err, doc) => {
+    async.series({
+      items: (cb) => {
+        Category.find({}, cb);
+      },
+      totalCount: (cb) => {
+        Category.count(cb);
+      }
+    }, (err, result) => {
       if (err) {
         return next(err);
       }
-      Category.count((error, data) => {
-        if (error) {
-          return next(error);
-        }
-        if (!data) {
-          return res.status(constant.NOT_FOUND).send({item: doc, totalCount: data});
-        }
-        return res.status(constant.OK).send({item: doc, totalCount: data});
-      });
+      return res.status(constant.OK).send(result);
     });
   }
 
@@ -34,7 +34,7 @@ class CategoryController{
       return res.status(constant.OK).send(doc);
     });
   }
-  
+
   delete(req, res, next) {
     const categoryId = req.params.categoryId;
 
