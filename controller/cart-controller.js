@@ -3,23 +3,23 @@ const constant = require('../config/constant');
 const async = require('async');
 
 class CartController {
+
   getAll(req, res, next) {
-    Cart.find({})
-        .populate('items.item')
-        .exec((err, doc) => {
-          if (err) {
-            return next(err);
-          }
-          Cart.count((error, data) => {
-            if (error) {
-              return next(error);
-            }
-            if (!data) {
-              return res.status(constant.NOT_FOUND).send({item: doc, totalCount: data});
-            }
-            return res.status(constant.OK).send({item: doc, totalCount: data});
-          });
-        });
+    async.series({
+      items: (cb) => {
+        Cart.find({})
+            .populate('items.item')
+            .exec(cb);
+      },
+      totalCount: (cb) => {
+        Cart.count(cb);
+      }
+    }, (err, result) => {
+      if (err) {
+        return next(err);
+      }
+      return res.status(constant.OK).send(result);
+    });
   }
 
   getOne(req, res, next) {
