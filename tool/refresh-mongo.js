@@ -11,8 +11,8 @@ const modelMap = {
 
 let docs = Object.keys(rawData);
 
-module.exports = function refresh() {
-  docs.forEach((v) => {
+module.exports = function refresh(done) {
+  Object.keys(rawData).forEach((v) => {
     modelMap[v].remove(() => {
       modelMap[v].create(rawData[v], () => {
         docs = docs.filter(doc => doc !== v);
