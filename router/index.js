@@ -4,6 +4,6 @@ const cart = require('./router/carts');
 
 module.exports = function (app) {
   app.use('/items', items);
-  app.use('/category', category);
-  app.use('/cart', cart);
-}
+  app.use('/categories', category);
+  app.use('/carts', cart);
+};
