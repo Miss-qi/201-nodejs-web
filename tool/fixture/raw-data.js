@@ -3,7 +3,7 @@ module.exports = {
     '_id': '587f0f2586653d19297d40c3',
     name: '苹果',
     price: 1,
-    category: '587f0f2586653d19297d40c9'
+    category: '587f0f2586653d19297d40c8'
   }, {
     '_id': '587f0f2586653d19297d40c4',
     name: '手机',
