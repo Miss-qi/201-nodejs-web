@@ -40,13 +40,13 @@ class CategoryController{
 
     async.waterfall([
       (done) => {
-        Item.find({categoryId}, done);
+        Item.findOne({categoryId}, done);
       },
       (data, done) => {
-        if (data.length !== 0) {
+        if (data) {
           done(true, null);
         } else {
-          Category.findOneAndRemove({'_id': categoryId}, (err, doc) => {
+          Category.findByIdAndRemove(categoryId, (err, doc) => {
             if (!doc) {
               done(false, null);
             }
@@ -79,7 +79,7 @@ class CategoryController{
 
   update(req, res, next) {
     const categoryId = req.params.categoryId;
-    Category.findOneAndUpdate({'_id': categoryId}, req.body, (err, doc) => {
+    Category.findByIdAndUpdate(categoryId, req.body, (err, doc) => {
       if (err) {
         return next(err);
       }
