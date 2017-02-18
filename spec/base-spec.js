@@ -1,3 +1,5 @@
-/**
- * Created by qiyanzi on 17-2-16.
- */
+const refresh = require('../tool/refresh-mongo');
+
+before((done) => {
+  refresh(done);
+});
