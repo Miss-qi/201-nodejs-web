@@ -8,7 +8,7 @@ class ItemController{
     async.series({
       items: (cb) => {
         Item.find({})
-            .populate('categoryId')
+            .populate('category')
             .exec(cb)
       },
       totalCount: (cb) => {
@@ -24,20 +24,22 @@ class ItemController{
 
   getOne(req, res, next) {
     const itemId = req.params.itemId;
-    Item.findById({'_id': itemId}, (err, doc) => {
-      if (err) {
-        return next(err);
-      }
-      if (!doc) {
-        return res.sendStatus(constant.NOT_FOUND);
-      }
-      return res.status(constant.OK).send(doc);
-    });
+    Item.findById(itemId)
+        .populate('category')
+        .exec((err, doc) => {
+          if (err) {
+            return next(err);
+          }
+          if (!doc) {
+            return res.sendStatus(constant.NOT_FOUND);
+          }
+          return res.status(constant.OK).send(doc);
+        });
   }
 
   delete(req, res, next) {
     const itemId = req.params.itemId;
-    Item.findOneAndRemove({'_id': itemId}, (err, doc) => {
+    Item.findByIdAndRemove(itemId, (err, doc) => {
       if (err) {
         return next(err);
       }
@@ -59,7 +61,7 @@ class ItemController{
 
   update(req, res, next) {
     const itemId = req.params.itemId;
-    Item.findOneAndUpdate({'_id': itemId}, req.body, (err, doc) => {
+    Item.findByIdAndUpdate(itemId, req.body, (err, doc) => {
       if (err) {
         return next(err);
       }
