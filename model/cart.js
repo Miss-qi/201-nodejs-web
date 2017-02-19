@@ -4,8 +4,11 @@ const Schema = mongoose.Schema;
 const cartSchema = new Schema({
   userId: String,
   items: [{
-    type: Schema.ObjectId,
-    ref: 'Item'
+    count: Number,
+    item: {
+      type: Schema.ObjectId,
+      ref: 'Item'
+    }
   }]
 });
 
