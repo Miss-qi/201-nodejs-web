@@ -1,18 +1,32 @@
-const Cart = require('../model/cart');
-const constant = require('../config/constant');
 const async = require('async');
 
-class CartController {
+const Cart = require('../model/cart');
+const constant = require('../config/constant');
 
+const mapItemToUri = (items) => {
+  return items.map(({count, item}) => {
+    return {uri: `items/${item}`, count};
+  });
+};
+
+class CartController {
   getAll(req, res, next) {
     async.series({
-      items: (cb) => {
-        Cart.find({})
-            .populate('items.item')
-            .exec(cb);
+      items: (done) => {
+        Cart.find({}, (err, docs) => {
+          if (err) {
+            return next(err);
+          }
+          let carts = docs.map((doc) => {
+            let cart = doc.toJSON();
+            cart.items = mapItemToUri(cart.items);
+            return cart;
+          });
+          done(null, carts);
+        });
       },
-      totalCount: (cb) => {
-        Cart.count(cb);
+      totalCount: (done) => {
+        Cart.count(done);
       }
     }, (err, result) => {
       if (err) {
@@ -24,22 +38,24 @@ class CartController {
 
   getOne(req, res, next) {
     const cartId = req.params.cartId;
-    Cart.findById(cartId)
-        .populate('items.item')
-        .exec((err, doc) => {
-          if (err) {
-            return next(err);
-          }
-          if (!doc) {
-            return res.sendStatus(constant.NOT_FOUND);
-          }
-          return res.status(constant.OK).send(doc);
-        });
+    Cart.findById(cartId, (err, doc) => {
+      if (err) {
+        return next(err);
+      }
+      if (!doc) {
+        return res.sendStatus(constant.NOT_FOUND);
+      }
+      let data = doc.toJSON();
+      let items = doc.items;
+      data.items = mapItemToUri(items);
+
+      return res.status(constant.OK).send(data);
+    });
   }
 
   delete(req, res, next) {
     const cartId = req.params.cartId;
-    Cart.findOneAndRemove({'_id': cartId}, (err, doc) => {
+    Cart.findByIdAndRemove(cartId, (err, doc) => {
       if (err) {
         return next(err);
       }
@@ -55,13 +71,13 @@ class CartController {
       if (err) {
         return next(err);
       }
-      return res.status(constant.CREATED).send({uri: 'carts/' + doc._id});
+      return res.status(constant.CREATED).send({uri: `carts/${doc._id}`});
     });
   }
 
   update(req, res, next) {
     const cartId = req.params.cartId;
-    Cart.findOneAndUpdate({'_id': cartId}, req.body, (err, doc) => {
+    Cart.findByIdAndUpdate(cartId, req.body, (err, doc) => {
       if (err) {
         return next(err);
       }

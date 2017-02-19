@@ -1,10 +1,10 @@
 const async = require('async');
+
 const Category = require('../model/category');
 const Item = require('../model/item');
 const constant = require('../config/constant');
 
-class CategoryController{
-  
+class CategoryController {
   getAll(req, res, next) {
     async.series({
       items: (done) => {
@@ -23,7 +23,6 @@ class CategoryController{
 
   getOne(req, res, next) {
     const categoryId = req.params.categoryId;
-
     Category.findById(categoryId, (err, doc) => {
       if (err) {
         return next(err);
@@ -31,24 +30,25 @@ class CategoryController{
       if (!doc) {
         return res.sendStatus(constant.NOT_FOUND);
       }
+
       return res.status(constant.OK).send(doc);
     });
   }
 
   delete(req, res, next) {
-    const categoryId = req.params.categoryId;
+    const category = req.params.categoryId;
 
     async.waterfall([
       (done) => {
-        Item.findOne({categoryId}, done);
+        Item.findOne({category}, done);
       },
-      (data, done) => {
-        if (data) {
+      (docs, done) => {
+        if (docs) {
           done(true, null);
         } else {
-          Category.findByIdAndRemove(categoryId, (err, doc) => {
+          Category.findByIdAndRemove(category, (err, doc) => {
             if (!doc) {
-              done(false, null);
+              return done(false, null);
             }
             done(err, doc);
           });
@@ -65,7 +65,7 @@ class CategoryController{
         return next(err);
       }
       return res.sendStatus(constant.NO_CONTENT);
-    });
+    })
   }
 
   create(req, res, next) {
@@ -73,7 +73,7 @@ class CategoryController{
       if (err) {
         return next(err);
       }
-      return res.status(constant.CREATED).send({uri: 'categories/' + doc._id});
+      return res.status(constant.CREATED).send({uri: `categories/${doc._id}`});
     });
   }
 
