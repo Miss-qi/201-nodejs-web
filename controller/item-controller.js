@@ -18,7 +18,7 @@ class ItemController{
       if (err) {
         return next(err);
       }
-      return res.status(constant.OK).send(result);
+      return res.status(constant.httpCode.OK).send(result);
     });
   }
 
@@ -31,9 +31,9 @@ class ItemController{
             return next(err);
           }
           if (!doc) {
-            return res.sendStatus(constant.NOT_FOUND);
+            return res.sendStatus(constant.httpCode.NOT_FOUND);
           }
-          return res.status(constant.OK).send(doc);
+          return res.status(constant.httpCode.OK).send(doc);
         });
   }
 
@@ -44,9 +44,9 @@ class ItemController{
         return next(err);
       }
       if (!doc) {
-        return res.sendStatus(constant.NOT_FOUND);
+        return res.sendStatus(constant.httpCode.NOT_FOUND);
       }
-      return res.sendStatus(constant.NO_CONTENT);
+      return res.sendStatus(constant.httpCode.NO_CONTENT);
     });
   }
 
@@ -55,7 +55,7 @@ class ItemController{
       if (err) {
         return next(err);
       }
-      return res.status(constant.CREATED).send({uri: 'items/' + doc._id});
+      return res.status(constant.httpCode.CREATED).send({uri: 'items/' + doc._id});
     });
   }
 
@@ -66,9 +66,9 @@ class ItemController{
         return next(err);
       }
       if (!doc) {
-        return res.sendStatus(constant.NOT_FOUND);
+        return res.sendStatus(constant.httpCode.NOT_FOUND);
       }
-      return res.sendStatus(constant.NO_CONTENT);
+      return res.sendStatus(constant.httpCode.NO_CONTENT);
     });
   }
 }
