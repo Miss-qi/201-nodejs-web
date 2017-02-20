@@ -4,11 +4,15 @@ const config = require('config');
 const router = require('./router');
 const bodyParser = require('body-parser');
 
-mongoose.connect(config.get('mongoUri'));
+mongoose.connect(config.get('mongoUri'), (err) => {
+  if (err) {
+    console.log('connect error');
+  } else {
+    console.log('connect success');
+  }
+});
 
 const app = express();
-
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res)=> {
   res.send({
@@ -16,6 +20,7 @@ app.get('/', (req, res)=> {
   })
 });
 
+app.use(bodyParser.json());
 router(app);
 
 app.listen(config.get('httpPort'), ()=> {
